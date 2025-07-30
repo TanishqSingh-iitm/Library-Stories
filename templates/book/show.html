@@ -1,0 +1,316 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Book {{book.title}}
+{% endblock %}
+
+{% block content %}
+
+<div class="title_back">
+    <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+                <div>
+                    <h1 class ="display-1" style="margin-left:5px"><b>Book {{book.title}}</b> </h1>
+                </div>
+            </div>
+            <div class="goback" >
+                <br>
+                <a href="{{url_for('show_section', id=book.section_id)}}" class="btn btn-success" style="margin-top:20px; border-radius:30px; font-size:20px">
+                    <i class="fa fa-reply" aria-hidden="true"></i>
+                    Go Back
+                </a>
+            </div>
+    </div>
+</div>
+
+<div class="Rectangle">
+<div class="details,canvas">
+    <div class="row justify-content-between">
+        <div class="child">   
+         <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:20px"> Title: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:20px;"> {{book.title}}</h4>
+                </div>
+            </div>
+            <div class="author">
+                <div class="d-flex justify-content-start">
+                    <div><br>
+                        <h3 style="margin-left:20px; margin-bottom:15px"> Author: </h3>
+                    </div>
+                    <div><br>
+                        <h4 style="margin-top:4px; margin-left:20px;"> {{book.author}}</h4>
+                    </div>
+                </div>
+         </div>
+         <div class="publisher">
+            <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:20px; margin-bottom:15px"> Publisher: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:20px;"> {{book.publisher}}</h4>
+                </div>
+            </div>
+     </div>
+     <div class="section">
+        <div class="d-flex justify-content-start">
+            <div><br>
+                <h3 style="margin-left:20px; margin-bottom:15px"> Section: </h3>
+            </div>
+            <div><br>
+                <h4 style="margin-top:4px; margin-left:20px;"> {{section_name}}</h4>
+            </div>
+        </div>
+    </div>
+     <div class="subsec">
+        <div class="d-flex justify-content-start">
+            <div><br>
+                <h3 style="margin-left:20px; margin-bottom:15px"> Sub-Sections: </h3>
+            </div>
+            <div><br>
+                <h4 style="margin-top:4px; margin-left:20px;"> {{book.subsections}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="a">
+        <div class="d-flex justify-content-start">
+            <div><br>
+                <h3 style="margin-left:20px; margin-bottom:15px"> Overall Ratings: </h3>
+            </div>
+            <div><br>
+                {% if overall > 0 %}
+                <h4 style="margin-top:4px; margin-left:20px;"> {{ '%0.2f'|format(overall|float) }}<i class="fa fa-star" aria-hidden="true"></i></h4>
+                {% else %}
+                <h4 style="margin-top:4px; margin-left:20px;"> Not Rated Yet</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+ </div>
+            <div class="child">
+            <div class="canvas" >
+                <br>
+                <div class="rectangle">
+                    {% if not book.book_image %}
+                        <img src="https://picsum.photos/seed/{{book.title}}/300/400"  alt="{{book.title}}" width=300 height=400 style="border-radius:17px;">
+                        {% else %}
+                        <img src="{{book.book_image}}"  width=320 height=420 alt="{{book.title}}" style="border-radius:10px;">
+                        {% endif %}
+                </div>
+            </div></div>
+    
+ </div>
+</div>
+</div>
+
+<div class="price_borrow">
+    <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:20px"> Price: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:10px;"> &#8377; {{book.price}}</h4>
+                </div> 
+            </div>
+            <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:20px"> Pages: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:10px;margin-right:500px"> {{book.pages}}</h4>
+                </div> 
+            </div>
+            <div>
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-success" , style="border-radius:30px; font-size:25px" disabled >
+                        <i class="fa fa-coffee" aria-hidden="true"></i>   
+                        Borrow Book
+                    </button>
+                </div>
+            </div>
+            <div>
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-success" , style="border-radius:10px;margin-right:5px; font-size:25px" disabled >
+                        <i class="fa fa-bookmark" aria-hidden="true"></i>   
+                    </button>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="vol_down">
+    <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:20px"> Volume: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:10px;"> {{book.volumne}}</h4>
+                </div> 
+            </div>
+            {% if book.is_audible %}
+            
+            <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:50px"> Audio Book: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:10px;margin-right:320px">Available <i class="fa fa-headphones" aria-hidden="true"></i></h4>
+                </div> 
+            </div>
+            {% else %}
+
+            <div class="d-flex justify-content-start">
+                <div><br>
+                    <h3 style="margin-left:50px"> Audio Book: </h3>
+                </div>
+                <div><br>
+                    <h4 style="margin-top:4px; margin-left:10px;margin-right:310px">UnAvailable</h4>
+                </div> 
+            </div>
+            
+            
+            {% endif %}
+            
+            <div>
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-success" , style="border-radius:30px; font-size:25px" disabled >
+                        <i class="fa fa-cart-plus" aria-hidden="true"></i> 
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div>
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-success" , style="border-radius:10px;margin-right:5px; font-size:25px" disabled >
+                        <i class="fa fa-heart" aria-hidden="true"></i> 
+                    </button>
+                </div>
+            </div>
+    </div>
+</div>
+
+{% if book.is_upcoming %}
+<div class="avail">
+    <div class="d-flex justify-content-start">
+        <div><br>
+            <h3 style="margin-left:20px"> Book Available Date: </h3>
+        </div>
+        <div><br>
+            <h4 style="margin-top:4px; margin-left:20px; text-align:justify"> {{book.avail}}</h4>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="desc">
+    <div class="d-flex justify-content-start">
+        <div><br>
+            <h3 style="margin-left:20px"> Book Description: </h3>
+        </div>
+        <div><br>
+            <h4 style="margin-top:4px; margin-left:20px; text-align:justify"> {{book.desc}}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="reviews">
+    <div class="d-flex justify-content-start">
+        <div><br>
+            <h3 style="margin-left:20px"> Book Ratings & Reviews: </h3>
+        </div>
+    </div>
+</div>
+
+{% for review in reviews %}
+    {% for user in users %}
+        {% if user.id == review.user_id %}
+                {% if not review.is_anonymous %}
+                    <div class="d-flex justify-content-start">
+                        <div>
+                            <h4 style="margin-left:40px"> @{{user.username}} </h4>
+                            {% if review.is_edited %}
+                                <h6 style="margin-left:70px">(Edited)</h6>
+                            {% endif %}
+                            {% if review.is_rated %}
+                                <h5 style="margin-left:70px">Ratings: {{review.ratings}}
+                                    [{% for i in range(review.ratings) %}
+                                            <i class="fa fa-star" aria-hidden="true"></i>  
+                                     {% endfor %}]</h5>
+                            {% endif %}
+                            {% if review.is_reviewed %}
+                                <h5 style="margin-left:60px; text-align:justify"> Review: {{review.review}} </h5>
+                            {% endif %}<hr style="margin-left:35px">
+                        </div>
+                    </div>
+                {% endif %}
+                {% if review.is_anonymous %}
+                <div class="d-flex justify-content-start">
+                    <div>
+                        <h4 style="margin-left:40px"> @AnonymousUser </h4>
+                        {% if review.is_edited %}
+                                <h6 style="margin-left:70px">(Edited)</h6>
+                            {% endif %}
+                        {% if review.is_rated %}
+                            <h5 style="margin-left:70px">Ratings: {{review.ratings}}
+                                [{% for i in range(review.ratings) %}
+                                        <i class="fa fa-star" aria-hidden="true"></i>  
+                                 {% endfor %}]</h5>
+                        {% endif %}
+                        {% if review.is_reviewed %}
+                            <h5 style="margin-left:70px; text-align:justify"> Review: {{review.review}} </h5>
+                        {% endif %}<hr style="margin-left:35px">
+                    </div>
+                </div>
+                {% endif %}
+         {% endif %}
+    {% endfor %}
+{% endfor %}
+
+
+
+
+<style>
+    .child{
+        display:inline-block;
+        width:50%;
+        
+    }
+    .title_back{
+        display:grid;
+        align-self: top;
+        grid-template-columns: 1fr;
+    }
+    .canvas{
+        display:flex;
+        justify-content: right;
+        align-items: right;
+    }
+    .rectangle {
+        display:flex;
+        width: 350px;
+        height: 450px;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #000000;
+        border-radius:20px;
+        background-color: #D7D7D7; 
+    }
+    .Rectangle{
+        border: 0px solid #000000;
+        height: 450px;
+    }
+
+</style>
+
+
+{% endblock %}

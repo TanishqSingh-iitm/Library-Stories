@@ -1,0 +1,168 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Profile Page
+{% endblock %}
+
+
+{% block content %}
+    <h1> Profile</h1>
+    <div class="heading">
+        <h1 class="display-1">
+            Hello
+            {% if user.is_dark %}
+            <span class="text" id="username">@{{user.username}}</span>
+            {% else %}
+            <span class="text-muted" id="username">@{{user.username}}</span>
+            {% endif %}
+        </h1>
+        <div class="profile-pic">
+            <img src="https://api.dicebear.com/6.x/lorelei/svg?seed={{user.username}}"  width=100 alt="">
+        </div>
+    </div>
+    
+    <div class="username_edit">
+        <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-start">
+                    <div><br>
+                        <h3> UserName: </h3>
+                    </div>
+                    <div><br>
+                        <h4 style="margin-top:4px; margin-left:10px;"> {{user.username}}</h4>
+                    </div> 
+                </div>
+                <div>
+                    <br>
+                    <div>
+                        <a href="{{url_for('editprofile')}}" class="btn btn-success" style="border-radius:30px"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Profile</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="name_author">
+        <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-start">
+                    <div><br>
+                        <h3> Name: </h3>
+                    </div>
+                    <div><br>
+                        <h4 style="margin-top:4px; margin-left:10px;">{{user.name}}</h4>
+                    </div> 
+                </div>
+                {% if user.role=="User" %}
+                <div>
+                        <a href="{{url_for('become_author')}}" class="btn btn-success" style="border-radius:30px"><i class="fa fa-user" aria-hidden="true"></i> Become Author</a>
+                </div>
+                {% endif %}
+                {% if user.is_author or user.is_admin %}
+                {% if user.is_dark %}
+                    <div>
+                        <a href="{{url_for('toggle_dark_mode')}}" class="btn btn-success" style="border-radius:30px"><i class="fa fa-sun" aria-hidden="true"></i> Light Mode</a>
+                    </div>
+                {% else %}
+                    <div>
+                         <a href="{{url_for('toggle_dark_mode')}}" class="btn btn-success" style="border-radius:30px"><i class="fa fa-moon" aria-hidden="true"></i> Dark Mode</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="email">
+        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-start">
+            <div><br>
+                <h3> E-mail: </h3>
+            </div>
+            <div><br>
+                <h4 style="margin-top:4px; margin-left:10px;">{{user.email}}</h4>
+            </div>
+        </div>
+        {% if not user.is_author and not user.is_admin %}
+        {% if user.is_dark %}
+            <div>
+                <a href="{{url_for('toggle_dark_mode')}}" class="btn btn-success" style="border-radius:30px;"><i class="fa fa-sun" aria-hidden="true"></i> Light Mode</a>
+            </div>
+        {% else %}
+        <div>
+            <a href="{{url_for('toggle_dark_mode')}}" class="btn btn-success" style="border-radius:30px;"><i class="fa fa-moon" aria-hidden="true"></i> Dark Mode</a>
+        </div>
+        {% endif %}
+        {% endif %}
+        
+    </div>
+    </div>
+    <div class="bio">
+        <div class="d-flex justify-content-start">
+            <div><br>
+                <h3> Biography: </h3>
+            </div>
+            <div><br>
+                <h4 style="margin-top:4px; margin-left:10px; text-align:left">{{user.bio}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="role">
+        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-start">
+            <div><br>
+                <h3> Current Role: </h3>
+            </div>
+            <div><br>
+                <h4 style="margin-top:4px; margin-left:10px; text-align:left">{{user.role}}</h4>
+            </div>
+        </div>
+        {% if not user.is_admin %}
+        <div>
+            <a href="{{url_for('userdelete')}}" class="btn btn-danger" style="border-radius:30px"><i class="fa fa-trash" aria-hidden="true"></i> Delete Account</a>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+    <div class="buttons d-flex justify-content-center align-items-center">
+        <a href="{{url_for('logout')}}" class="btn btn-outline-danger" style="border-radius:30px; font-size:20px">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+    </div>
+    
+    
+    {% endblock %}
+
+
+
+    {% block style %}
+    {% if  not user.is_dark %}
+    <style>
+        .heading{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .profile-pic{
+            width: 100px;
+            height: 100px;
+            border: 3px solid black;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    </style>
+    {% else %}
+    <style>
+    .heading{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .profile-pic{
+        width: 100px;
+        height: 100px;
+        border: 3px solid rgba(85, 85, 85, 0.812);
+        border-radius: 50%;
+        background-color: whitesmoke;
+        overflow: hidden;
+        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5);
+    }
+    </style>
+    {% endif %}
+
+{% endblock %}

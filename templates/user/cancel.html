@@ -1,0 +1,23 @@
+
+{% extends 'layout.html' %}
+
+{% block title %}
+    Cancel Book Request
+{% endblock %}
+
+{% block content %}
+
+<h1 class="display-1">
+    Cancel Book Request
+</h1>
+<p class="f-3" style="font-size:25px;">Are you sure you want to Request of Book {{book.title}}?</p>
+
+<form action="" method="post" class="form">
+    <div align="center">
+    <button type="submit" class="btn btn-danger"  style="font-size:15px; border-radius:30px">
+        <i class="fas fa-times    "></i>
+       Cancel Book Request
+    </button></div>
+</form>
+
+{% endblock %}

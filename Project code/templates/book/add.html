@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Add Book
+{% endblock %}
+
+{% block content %}
+
+<h1 class="display-1">
+    Add Book
+</h1>
+
+<form action="{{url_for('add_book_post')}}" method="post" class="form">
+    <div class="form-group">
+        <label for="name" class="form-label" style="font-size: 25px;">Book Title:</label>
+        <input type="text" name="name" placeholder="Type Book Title " id="name" class="form-control" required style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="publisher" class="form-label" style="font-size: 25px;">Book Publisher:</label>
+        <input type="text" name="publisher" placeholder="Type Book Publisher (Optional)" id="publisher" class="form-control" style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="author" class="form-label" style="font-size: 25px;">Book Author:</label>
+        <input type="text" name="author" placeholder="Type Book Author " id="author" class="form-control" required style="border-radius:60px">
+    </div>
+    
+    <div class="form-group">
+        <label for="section_id" class="form-label" style="font-size: 25px;">Section:</label>
+        <select name="section_id" id="section_id" class="form-control" required style="border-radius:60px">
+            {% for sec in sections %}
+            {% if sec.id == section.id %}
+                <option selected value="{{sec.id}}">{{sec.name}}</option>
+            {% else %}
+                <option value="{{sec.id}}">{{sec.name}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="author" class="form-label" style="font-size: 25px;">Book Description:</label>
+        <input type="text" name="desc" placeholder="Type Book Description (Optional) " id="desc" class="form-control"  style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="ssec" class="form-label" style="font-size: 25px;">Book Sub-Sections:</label>
+        <input type="text" name="ssec" placeholder="Type Book Sub-Sections (Optional) " id="ssec" class="form-control" style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="pages" class="form-label" style="font-size: 25px;">No of Book Pages:</label>
+        <input type="number" name="pages" placeholder="Type No of Pages in Book (Optional)" id="page" class="form-control" style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="volume" class="form-label" style="font-size: 25px;">Book Volume:</label>
+        <input type="number" name="volume" placeholder="Type Volume of Book (Optional)" id="volume" class="form-control" style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="bookimg" class="form-label" style="font-size: 25px;">Book Image Link:</label>
+        <input type="text" name="bookimg" placeholder="Type Book Image Link (Optional) " id="bookimg" class="form-control"  style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="content" class="form-label" style="font-size: 25px;">Book Content:</label>
+        <input type="text" name="content" placeholder="Type Book Content (Optional) " id="content" class="form-control" style="border-radius:60px">
+    </div>
+    <div class="form-group">
+        <label for="link" class="form-label" style="font-size: 25px;">Book Link:</label>
+        <input type="text" name="link" placeholder="Type Book Link (Optional) " id="link" class="form-control" style="border-radius:60px">
+    </div>
+    
+    <div class="form-group">
+        <label for="availdate" class="form-label" style="font-size: 25px;">Book Available Date:</label>
+        <input type="date" name="availdate" id="availdate" required value="{{now}}" class="form-control" style="border-radius:60px">
+    </div>
+   
+    <div class="form-group">
+        <label for="price" class="form-label" style="font-size: 25px;">Book Price:</label>
+        <input type="number" name="price" id="price" min="0" value="0" class="form-control" required style="border-radius:60px">
+    </div>
+    <div class="form-group"><br>
+        <input type="checkbox" class="form-check-input" name="isaudi" id="isaudi" style="margin-top:7px">
+        <label class="form-check-label" for="isaudi" style="font-size: 20px; margin-bottom:25px">Book is Available in Audio</label>
+    </div>
+    <div align="center"><br>
+    <button type="submit" class="btn btn-success" style="border-radius:60px">
+        <i class="fas fa-plus-circle    "></i>
+        Add
+    </button><br><br></div>
+</form>
+
+{% endblock %}

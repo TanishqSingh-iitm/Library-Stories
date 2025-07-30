@@ -1,0 +1,150 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Book Approval Dashboard
+{% endblock %}
+
+{% block content %}
+<h1 class="display-1">Book Approval Dashboard</h1>
+
+<h2>Pending Book Approvals:</h2>
+{% if counts>0%}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>Req.ID</th>
+            <th>Section Name</th>
+            <th>Book Title</th>
+            <th>User Name</th>
+            <th># of Granted Books</th>
+            <th>Request Date</th>
+            <th># of Days Requested</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        <tr>{% if not request.isgranted %}
+            <td>{{request.id}}</td>
+        {% for section in sections %}
+            {% for book in books %}
+            {% if book.id == request.book_id %}
+            {% if section.id == book.section_id %}
+                <td>{{section.name}}</td>
+                <td>{{book.title}}</td>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% for users in users %}
+            {% if users.id == request.user_id %}
+                <td>{{users.name}}</td>
+                <td>{{ users.books_requested }}</td>
+            {% endif %}
+        {% endfor %}
+
+            <td>{{request.requested_at}}</td>
+            <td>{{request.request_days}}</td>
+            <td><div class="buttons">
+                <a href="{{url_for('ad_show_book', id=request.book_id)}}" class="btn btn-primary" style="border-radius:30px">
+                    <i class="fas fa-eye" aria-hidden="true"   ></i>
+                    Show
+                </a>
+                <form method="post" action="{{url_for('approvals_post_grant',request_id = request.id)}}">
+                    <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i> Grant
+                    </button>
+                </form>
+                <form method="post" action="{{url_for('approvals_post_reject',request_id = request.id)}}">
+                    <button type="submit" class="btn btn-danger" style="border-radius:30px;">
+                        <i class="fa fa-times" aria-hidden="true"></i> Reject
+                    </button>
+                </form>
+                </div>
+            </td>
+        </tr>{% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total Pending Approvals: {{ counts }}</span>
+</div>    
+{% else %}
+<div class="alert alert-info" style="border-radius: 20px;">
+    <h3>No Pending Books Approval Requests</h3>
+</div>
+{% endif %}
+
+<h2 style="margin-top:100px;">Approved Book Requests:</h2>
+{% if countss > 0 %}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>Request ID</th>
+            <th>Section Name</th>
+            <th>Book Title</th>
+            <th>User Name</th>
+            <th>Granted on</th>
+            <th>Revoked at</th>
+            <th># of Days Requested</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        {% if request.isgranted %}
+        <tr>
+            <td>{{request.id}}</td>
+        {% for section in sections %}
+            {% for book in books %}
+            {% if book.id == request.book_id %}
+            {% if section.id == book.section_id %}
+                <td>{{section.name}}</td>
+                <td>{{book.title}}</td>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% for users in users %}
+        {% if users.id == request.user_id %}
+            <td>{{users.name}}</td>
+        {% endif %}
+
+    {% endfor %}
+            <td>{{request.granted_at}}</td>
+            <td>{{request.revoked_at}}</td>
+            <td>{{request.request_days}}</td>
+            <td><div class="buttons">
+                <form method="post" action="{{url_for('approvals_post_revoke', request_id=request.id)}}">
+                    <button type="submit" class="btn btn-danger" style="border-radius:30px;">
+                        <i class="fa fa-minus" aria-hidden="true"></i> Revoke Book Access
+                    </button>
+                </form>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total Approved Books: {{ countss }}</span>
+</div>    
+{% else %}
+<div class="alert alert-info" style="border-radius: 20px;">
+    <h3>No Approved Books Requests</h3>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block style %}
+<style>
+    .buttons {
+        display: flex;
+        justify-content: space-around;
+    }
+    .heads {
+        justify-content: space-around;
+    }
+</style>
+{% endblock %}

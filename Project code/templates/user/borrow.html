@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Borrow Book
+{% endblock %}
+
+
+{% block content %}
+    <div class="heading" align="center">
+        <h1 class="display-1" align="center">
+            Welcome to Borrow Book Form <br>@{{user.username}}
+        </h1>
+    </div>
+
+    <!-- form to borrow book -->
+
+    <form action="{{url_for('borrow_post',id=books.id)}}" method="post" class="form">
+        <div class="form-group">
+            <label for="Book_title" class="form-label" style="font-size: 25px;">Book Title:</label>
+            <select name="book_id" id="book_id" class="form-control" required style="border-radius:60px">
+                    <option selected value="{{books.id}}">{{books.title}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Book_author" class="form-label" style="font-size: 25px;">Book Author:</label>
+            <select name="book_author" id="book_author" class="form-control" required style="border-radius:60px">
+                    <option selected value="{{books.author}}">{{books.author}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Book_pub" class="form-label" style="font-size: 25px;">Book Publisher:</label>
+            <select name="book_pub" id="book_publisher" class="form-control" required style="border-radius:60px">
+                    <option selected value="{{books.publisher}}">{{books.publisher}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="section_id" class="form-label" style="font-size: 25px;">Section:</label>
+            <select name="section_id" id="section_id" class="form-control" required style="border-radius:60px">
+                    <option selected value="{{sections.id}}">{{sections.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="bookborrow" class="form-label" style="font-size: 25px;">No of Days Borrowing The Book:</label>
+            <input type="number" name="bookborrow" placeholder="Enter No of Days Borrowing Book" min="1" max="365" id="bookborrow" required class="form-control" style="border-radius:60px">
+        </div>
+        
+        <div class="buttons d-flex justify-content-center align-items-center">
+            <div class="form-group m-3">
+                <input type="submit" value="Request Book" class="btn btn-success" style="border-radius: 30px;">
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block style %}
+
+<style>
+    .heading{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+</style>
+    
+{% endblock %}

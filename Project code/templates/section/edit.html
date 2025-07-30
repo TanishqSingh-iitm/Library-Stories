@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Edit Book Section
+{% endblock %}
+
+{% block content %}
+
+<h1 class="display-1">
+    Edit Book Section
+</h1>
+
+<form action="" method="post" class="form">
+    <div class="form-group">
+        <label for="name" class="form-label" style="font-size:25px;">Section Name:</label>
+        <input type="text" name="name" id="name" placeholder="Type New Book Section Name" class="form-control"  style="border-radius:60px;" required>
+    </div>
+    <div class="form-group">
+        <label for="Desc" class="form-label" style="font-size:25px;">Section Description:</label>
+        <input type="text" name="desc" id="desc" placeholder="Type New Short Description of section" class="form-control" style="border-radius:60px;">
+    </div>
+    <div align="center"> <br>
+    <button type="submit" class="btn btn-success" , style="border-radius:30px;" >
+        <i class="fa fa-wrench" aria-hidden="true"></i>    
+        Update
+    </button></div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h1 class="display-1">Orders</h1>
+<button class="btn btn-primary" onClick="window.print();">
+    <i class="fas fa-print    "></i>
+    Print
+</button>
+
+<a href="{{url_for('export_csv')}}" class="btn btn-outline-primary">
+    <i class="fas fa-file-export    "></i>
+    Export
+</a>
+
+<hr>
+
+{% if user.is_author %}
+<div class="heading">
+    <h2 class="text-muted">Transaction #0</h2>
+    <p class="datetime">{{user.date_upgraded.strftime('%d %b %Y, %I:%M %p')}}</p>
+</div>
+<div class="orders">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction Details</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Subscription Fees for Becoming Author at Library-Stories (One Time Fee)</td>
+                <td>&#8377; 3000</td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
+
+
+{% if transactions|length > 0 %}
+    {% for transaction in transactions %}
+        <div class="heading">
+            {% if user.is_dark %}
+            <h2 class="text">Transaction #{{transaction.id}}</h2>
+            {% else %}
+            <h2 class="text-muted">Transaction #{{transaction.id}}</h2>
+            {% endif %}
+            
+            <p class="datetime">{{transaction.datetime.strftime('%d %b %Y, %I:%M %p')}}</p>
+        </div>
+        <div class="orders">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Book Author</th>
+                        <th>Book Section</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if transaction.orders|length > 0 %}
+                    {% for order in transaction.orders %}
+                    <tr>
+
+                        <td>{{order.book.title}}</td>
+                        <td>{{order.book.author}}</td>
+                        {% for sec in sections %}
+                            {% if order.book.section_id==sec.id %}
+                                <td>{{sec.name}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>{{order.price}}</td>
+                        <td>{{order.price}}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td>{{transaction.trans_details.split(",")[0]}}</td>
+                        <td>{{transaction.trans_details.split(",")[1]}}</td>
+                        <td>{{transaction.trans_details.split(",")[2]}}</td>
+                        <td>{{transaction.trans_details.split(",")[3]}}</td>
+                        <td>{{transaction.trans_details.split(",")[3]}}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info" style="border-radius:20px ;">
+        <h2>No Orders</h2>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block style %}
+
+<style>
+    .heading {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .datetime {
+        font-size: 1.0rem;
+    }
+</style>
+
+{% endblock %}

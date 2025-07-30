@@ -1,0 +1,232 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    My Book Dashboard
+{% endblock %}
+
+{% block content %}
+<h1 class="display-1">My Books Dashboard</h1>
+<div align="right">
+    <a href="{{url_for('user_stats')}}" class="btn btn-success" style="border-radius:30px;margin-right:10px;">
+        <i class="fas fa-bar-chart" aria-hidden="true"   ></i>
+        Statistics
+    </a>
+    <a href="{{url_for('myfavorite')}}" class="btn btn-success" style="border-radius:30px;margin-right:10px;">
+        <i class="fas fa-heart" aria-hidden="true"   ></i>
+        Favorites
+    </a>
+    <a href="{{url_for('mywishlist')}}" class="btn btn-success" style="border-radius:30px;margin-right:10px;">
+        <i class="fas fa-th-list" aria-hidden="true"   ></i>
+        WishList
+    </a>
+    <a href="{{url_for('myreviews')}}" class="btn btn-success" style="border-radius:30px;margin-right:10px;">
+        <i class="fas fa-pencil" aria-hidden="true"   ></i>
+        My Reviews
+    </a>
+</div>
+<br>
+
+<h2>Approved Books:</h2>
+{% if countss > 0 %}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>Request No</th>
+            <th>Section Name</th>
+            <th>Book Title</th>
+            <th>Granted on</th>
+            <th>Revoked on</th>
+            <th># of Days Requested</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        {% if request.isgranted and request.isrequested %}
+        <tr><div class="heads">
+            <td>{{ loop.index }}</td>
+        {% for section in sections %}
+            {% for book in books %}
+            {% if book.id == request.book_id %}
+                {% if section.id == book.section_id %}
+                <td>{{section.name}}</td>
+                <td>{{book.title}}</td>
+            {% endif %}
+            
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+            <td>{{request.granted_at}}</td>
+            <td>{{request.revoked_at}}</td>
+            <td>{{request.request_days}}</td>
+            <td><div class="buttons">
+                {% for book in books %}
+                    {% if book.id == request.book_id %}
+                        {% if not book.book_link %}
+                            <a href="{{url_for('read_listen', request_id=request.id)}}" class="btn btn-primary" style="border-radius:30px">
+                                <i class="fas fa-eye" aria-hidden="true"   ></i>
+                                Read Book
+                            </a>
+                        {%endif%}
+                        {% if book.book_link %}
+                            <a href="{{book.book_link}}" class="btn btn-primary" style="border-radius:30px">
+                                <i class="fas fa-eye" aria-hidden="true"   ></i>
+                                Read Book
+                            </a>
+                        {%endif%}
+                    {% endif %}
+                {% endfor %}
+                <a href="{{url_for('Review', request_id=request.id)}}" class="btn btn-success" style="border-radius:30px">
+                    <i class="fas fa-pencil" aria-hidden="true"   ></i>
+                    Review Book
+                </a>
+                <a href="{{url_for('return_get', request_id=request.id)}}" class="btn btn-danger" style="border-radius:30px">
+                    <i class="fas fa-arrow-left" aria-hidden="true"   ></i>
+                    Return Book
+                </a>
+                </div>
+            </td></div>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total Approved Books: {{ countss }}</span>
+</div>
+{% else %}
+    <div class="alert alert-info" style="border-radius: 20px;">
+        <h3>No Approved Books</h3>
+    </div>
+{% endif %}
+
+<h2 style="margin-top:200px;">Pending Books for Approval:</h2>
+{% if counts > 0 %}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>Request No</th>
+            <th>Section Name</th>
+            <th>Book Title</th>
+            <th>Book Author</th>
+            <th>Request Date</th>
+            <th># of Days Requested</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        <tr>{% if not request.isgranted and not request.isrejected and not request.isrevoked and request.isrequested %}
+            <td>{{ loop.index }}</td>
+        {% for section in sections %}
+            {% for book in books %}
+            {% if book.id == request.book_id %}
+            {% if section.id == book.section_id %}
+                <td>{{section.name}}</td>
+                <td>{{book.title}}</td>
+            <td>{{book.author}}</td>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% for users in users %}
+            {% if users.id == request.user_id %}
+                <td>{{users.name}}</td>
+                <td>{{ users.books_requested }}</td>
+            {% endif %}
+        {% endfor %}
+
+            <td>{{request.requested_at}}</td>
+            <td>{{request.request_days}}</td>
+            <td><div class="buttons">
+                <a href="{{url_for('cancel', request_id=request.id)}}" class="btn btn-danger" style="border-radius:30px">
+                    <i class="fas fa-times" aria-hidden="true"   ></i>
+                    Cancel Book Request
+                </a>
+                </div>
+            </td>
+        </tr>{% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total Pending Books: {{ counts }}</span>
+</div>
+{% else %}
+    <div class="alert alert-info" style="border-radius: 20px;">
+        <h3>No Pending Book Approvals</h3>
+    </div>
+{% endif %}
+
+<h2 style="margin-top:200px;">Downloadable E-Book PDFs:</h2>
+{% if transactions|length > 0 %}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>E-book No</th>
+            <th>Section Name</th>
+            <th>Book Title</th>
+            <th>Book Author</th>
+            <th>Purchase Date</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+            {% for transaction in transactions %}
+                    {% if transaction.orders|length > 0 %}
+                        {% for order in transaction.orders %}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                    {% for sec in sections %}
+                                        {% if order.book.section_id==sec.id %}
+                                            <td>{{sec.name}}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td>{{order.book.title}}</td>
+                                    <td>{{order.book.author}}</td>
+                                    <td>{{transaction.datetime.strftime('%d %b %Y, %I:%M %p')}}</td>
+                                    <td><div class="buttons1">
+                                        <form method="post" action="{{url_for('download',id=order.book.id)}}">
+                                            <button type="submit" class="btn btn-info" style="border-radius:30px;">
+                                                <i class="fa fa-download" aria-hidden="true"></i> Download PDF
+                                            </button>
+                                        </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                    
+
+                    {% endif %}
+        </tr>{% endfor %}
+        
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total E-Books: {{ transactions|length }}</span>
+</div>
+{% else %}
+    <div class="alert alert-info" style="border-radius: 20px;">
+        <h3>No E-Books Purchased</h3>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block style %}
+<style>
+    .buttons {
+        display: flex;
+        justify-content: space-around;
+        font-size: 10px;
+    }
+    .heads {
+        justify-content: space-around;
+    }
+    .buttons1 {
+        display: flex;
+        margin-right: 10px;
+        font-size: 10px;
+    
+    }
+</style>
+{% endblock %}

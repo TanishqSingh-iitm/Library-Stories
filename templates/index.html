@@ -1,0 +1,638 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% include 'searchbar.html' with context %}
+
+{% if not blacklisted.is_blacklisted or user.is_admin %}
+{% if searchpara=='' or selected_option==''%}
+    <hr style="border-top: 8px solid #686767ec; border-radius:8px;">
+    <div class="sections-list">
+        {% if sections|length > 0 or sections %}
+        {% if newbooks|length >0 %}
+        <div><h2 align="center">New Releases</h2>
+            <hr><div class="books">
+                {% for book in newbooks %}
+                    <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+                        {% if not book.book_image %}
+                        <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+                        {% else %}
+                        <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+                        {% endif %}
+                    <div class="card-body" id="text">
+                        <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                            {{book.title}}
+                        
+                        </h5> </a>
+                        <p class="card-text" > 
+                            <div class="author">
+                                <strong>Author:</strong>
+                                {{book.author}}
+                            </div>
+                            <div class="publisher">
+                                <strong>Publisher:</strong>
+                                {{book.publisher}}
+                            </div>
+                            <div class="price">
+                                <strong>Price:</strong>
+                                &#8377; {{book.price}}
+                            </div>
+                        </p>
+                        <div class="card-footer bg-transparent border-success">
+                            {% if book.price>0 %}
+                            <div class="buttons">
+                        <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                        <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                            <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                            </button>
+                        </form>
+                            </div>
+                        {% else %}
+                         <div style="margin-top:5px" align="center">   
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                            </div>
+                        {% endif %}
+                       </div>
+                    </div>
+                </div>
+            <div>
+            </div> {% endfor %}</div>
+        </div>
+        {% endif %}
+        {% endif %}
+        
+
+
+        {% if sections|length > 0 or sections %}
+        {% if upcoming_books|length >0 %}
+        <div><hr><h2 align="center">Upcoming</h2>
+            <hr><div class="books">
+            {% for book in upcoming_books %}
+            <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+                {% if not book.book_image %}
+                <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+                {% else %}
+                <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+                {% endif %}
+                <div class="card-body" id="text">
+                    <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                        {{book.title}}
+                    
+                    </h5> </a>
+                    <p class="card-text"> 
+                        <div class="author">
+                            <strong>Author:</strong>
+                            {{book.author}}
+                        </div>
+                        <div class="publisher">
+                            <strong>Publisher:</strong>
+                            {{book.publisher}}
+                        </div>
+                        <div class="price">
+                            <strong>Price:</strong>
+                            &#8377; {{book.price}}
+                        </div>
+                    </p>
+                    <div class="card-footer bg-transparent border-success">
+                        {% if book.price>0 %}
+                        <div class="buttons">
+                    <a href="{{url_for('profile')}}" class="btn btn-success" style="border-radius:30px; pointer-events:none " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                    <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}" style="pointer-events:none">
+                        <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                        </button>
+                    </form>
+                        </div>
+                    {% else %}
+                     <div style="margin-top:5px" align="center">   
+                     <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; pointer-events:none " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                        </div>
+                    {% endif %}
+                   </div>
+                </div>
+            </div>
+            {% endfor %}</div>
+        </div>
+        {% endif %}
+        {% endif %}
+        
+
+
+
+        {% if sections|length > 0 or sections %}
+        {% if bestsellers|length > 0 %}
+        <div><hr>
+        <h2 align="center">BestSellers</h2>
+           <hr> <div class="books">
+            {% for book in bestsellers %}
+            <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+                {% if not book.book_image %}
+                <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+                {% else %}
+                <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+                {% endif %}
+                <div class="card-body" id="text">
+                    <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                        {{book.title}}
+                    
+                    </h5> </a>
+                    <p class="card-text"> 
+                        <div class="author">
+                            <strong>Author:</strong>
+                            {{book.author}}
+                        </div>
+                        <div class="publisher">
+                            <strong>Publisher:</strong>
+                            {{book.publisher}}
+                        </div>
+                        <div class="price">
+                            <strong>Price:</strong>
+                            &#8377; {{book.price}}
+                        </div>
+                    </p>
+                    <div class="card-footer bg-transparent border-success">
+                        {% if book.price>0 %}
+                        <div class="buttons">
+                    <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px;  " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                    <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                        <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                        </button>
+                    </form>
+                        </div>
+                    {% else %}
+                     <div style="margin-top:5px" align="center">   
+                     <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; pointer-events:none " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                        </div>
+                    {% endif %}
+                   </div>
+                </div>
+            </div>
+            {% endfor %}</div>
+        </div>
+       {% endif %}
+       {% endif %}
+
+       {% for section in sections %}
+       <div> <hr>
+            <h2 align="center">{{ section.name}}</h2>
+            <div class="books">
+                {% for book in section.books %}
+                {% if not book.is_upcoming %} 
+                <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+                    {% if not book.book_image %}
+                    <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+                    {% else %}
+                    <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+                    {% endif %}
+                    <div class="card-body" id="text">
+                        <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                            {{book.title}}
+                        
+                        </h5> </a>
+                        <p class="card-text"> 
+                            <div class="author">
+                                <strong>Author:</strong>
+                                {{book.author}}
+                            </div>
+                            <div class="publisher">
+                                <strong>Publisher:</strong>
+                                {{book.publisher}}
+                            </div>
+                            <div class="price">
+                                <strong>Price:</strong>
+                                &#8377; {{book.price}}
+                            </div>
+                        </p>
+                        <div class="card-footer bg-transparent border-success">
+                            {% if book.price>0 %}
+                            <div class="buttons">
+                                <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                                <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                                    <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                        <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        {% else %}
+                         <div style="margin-top:5px" align="center">   
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                            </div>
+                        {% endif %}
+                       </div>
+                    </div>
+        </div>
+         {% endif %}
+        {% endfor %}
+
+    </div>
+    </div>
+ {% endfor %}
+ </div>
+
+
+{% endif %}
+
+
+
+{% if selected_option=='section' and searchpara != '' %}
+{% for section in sections %}
+<div> <hr style="border-top: 8px solid #686767ec; border-radius:8px;">
+     <h2 align="center">{{ section.name}}</h2>
+     <div class="books">
+         {% for book in section.books %}
+         {% if not book.is_upcoming %} 
+         <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+             {% if not book.book_image %}
+             <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+             {% else %}
+             <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+             {% endif %}
+             <div class="card-body" id="text">
+                 <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                     {{book.title}}
+                 
+                 </h5> </a>
+                 <p class="card-text"> 
+                     <div class="author">
+                         <strong>Author:</strong>
+                         {{book.author}}
+                     </div>
+                     <div class="publisher">
+                         <strong>Publisher:</strong>
+                         {{book.publisher}}
+                     </div>
+                     <div class="price">
+                         <strong>Price:</strong>
+                         &#8377; {{book.price}}
+                     </div>
+                 </p>
+                 <div class="card-footer bg-transparent border-success">
+                     {% if book.price>0 %}
+                     <div class="buttons">
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                         <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                             <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                 <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                             </button>
+                         </form>
+                     </div>
+                 {% else %}
+                  <div style="margin-top:5px" align="center">   
+                  <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                     </div>
+                 {% endif %}
+                </div>
+             </div>
+ </div>
+  {% endif %}
+ {% endfor %}
+
+</div>
+</div>
+{% endfor %}
+</div>
+{% if sections | length ==0 %}<br>
+ <div class="alert alert-info w-50" style="border-radius: 20px; margin-left:450px;" width="20px" align="center">
+    <h3>No Such E-book Section Found </h3>
+</div>
+{% endif %}
+{% endif %}
+
+
+{% if selected_option=='ebook' and searchpara != '' %}
+    {% for section in sections %}
+       <div> <hr style="border-top: 8px solid #686767ec; border-radius:8px;">
+            <h2 align="center">{{ section.name}}</h2>
+            <div class="books">
+                {% for book in ebooks %}
+                {% if book.section_id == section.id %}    
+                {% if not book.is_upcoming %} 
+                <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+                    {% if not book.book_image %}
+                    <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+                    {% else %}
+                    <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+                    {% endif %}
+                    <div class="card-body" id="text">
+                        <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                            {{book.title}}
+                        
+                        </h5> </a>
+                        <p class="card-text"> 
+                            <div class="author">
+                                <strong>Author:</strong>
+                                {{book.author}}
+                            </div>
+                            <div class="publisher">
+                                <strong>Publisher:</strong>
+                                {{book.publisher}}
+                            </div>
+                            <div class="price">
+                                <strong>Price:</strong>
+                                &#8377; {{book.price}}
+                            </div>
+                        </p>
+                        <div class="card-footer bg-transparent border-success">
+                            {% if book.price>0 %}
+                            <div class="buttons">
+                                <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                                <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                                    <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                        <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        {% else %}
+                         <div style="margin-top:5px" align="center">   
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                            </div>
+                        {% endif %}
+                       </div>
+                    </div>
+        </div>
+         {% endif %}
+         {% endif %}
+        {% endfor %}
+
+    </div>
+    </div>
+ {% endfor %}
+ </div>
+ {% if ebooks | length ==0 %}<br>
+ <div class="alert alert-info w-50" style="border-radius: 20px; margin-left:450px;" width="20px" align="center">
+    <h3>No Such E-Books Found </h3>
+</div>
+{% endif %}
+{% endif %}
+
+
+
+{% if selected_option=='author' and searchpara != '' %}
+{% for section in sections %}
+<div> <hr style="border-top: 8px solid #686767ec; border-radius:8px;">  <h2 align="center">{{ section.name}}</h2> 
+     <div class="books">
+         {% for book in author_books %}
+         {% if book.section_id == section.id %}        
+         {% if not book.is_upcoming %} 
+         <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+             {% if not book.book_image %}
+             <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+             {% else %}
+             <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+             {% endif %}
+             <div class="card-body" id="text">
+                 <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                     {{book.title}}
+                 
+                 </h5> </a>
+                 <p class="card-text"> 
+                     <div class="author">
+                         <strong>Author:</strong>
+                         {{book.author}}
+                     </div>
+                     <div class="publisher">
+                         <strong>Publisher:</strong>
+                         {{book.publisher}}
+                     </div>
+                     <div class="price">
+                         <strong>Price:</strong>
+                         &#8377; {{book.price}}
+                     </div>
+                 </p>
+                 <div class="card-footer bg-transparent border-success">
+                     {% if book.price>0 %}
+                     <div class="buttons">
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                         <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                             <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                 <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                             </button>
+                         </form>
+                     </div>
+                 {% else %}
+                  <div style="margin-top:5px" align="center">   
+                  <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                     </div>
+                 {% endif %}
+                </div>
+             </div>
+ </div>
+  {% endif %}
+  {% endif %}
+ {% endfor %}
+
+</div>
+</div>
+{% endfor %}
+</div>
+{% if author_books | length ==0 %}<br>
+ <div class="alert alert-info w-50" style="border-radius: 20px; margin-left:450px;" width="20px" align="center">
+    <h3>No Such Author's E-Books Found </h3>
+</div>
+{% endif %}
+{% endif %}
+
+
+
+
+{% if selected_option=='publisher' and searchpara != '' %}
+{% for section in sections %}
+<div> <hr style="border-top: 8px solid #686767ec; border-radius:8px;">
+     <h2 align="center">{{ section.name}}</h2>
+     <div class="books">
+         {% for book in pub_books %}
+         {% if book.section_id == section.id %}   
+         {% if not book.is_upcoming %} 
+         <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+             {% if not book.book_image %}
+             <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+             {% else %}
+             <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+             {% endif %}
+             <div class="card-body">
+                 <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                     {{book.title}}
+                 
+                 </h5> </a>
+                 <p class="card-text" id="text"> 
+                     <div class="author">
+                         <strong>Author:</strong>
+                         {{book.author}}
+                     </div>
+                     <div class="publisher">
+                         <strong>Publisher:</strong>
+                         {{book.publisher}}
+                     </div>
+                     <div class="price">
+                         <strong>Price:</strong>
+                         &#8377; {{book.price}}
+                     </div>
+                 </p>
+                 <div class="card-footer bg-transparent border-success">
+                     {% if book.price>0 %}
+                     <div class="buttons">
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                         <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                             <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                 <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                             </button>
+                         </form>
+                     </div>
+                 {% else %}
+                  <div style="margin-top:5px" align="center">   
+                  <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                     </div>
+                 {% endif %}
+                </div>
+             </div>
+ </div>
+  {% endif %}
+  {% endif %}
+ {% endfor %}
+
+</div>
+</div>
+{% endfor %}
+</div>
+{% if pub_books | length ==0 %}<br>
+ <div class="alert alert-info w-50" style="border-radius: 20px; margin-left:450px;" width="20px" align="center">
+    <h3>No Such Publisher's E-Books Found </h3>
+</div>
+{% endif %}
+{% endif %}
+
+
+{% if selected_option=='price' and searchpara != '' %}
+{% for section in sections %}
+<div> <hr style="border-top: 8px solid #686767ec; border-radius:8px;">
+     <h2 align="center">{{ section.name}}</h2>
+     <div class="books">
+         {% for book in priced_books %}
+         {% if book.section_id == section.id %}   
+         {% if not book.is_upcoming %} 
+         <div class="card border-primary mb-3" id="card" style="width: 20rem;">
+             {% if not book.book_image %}
+             <img src="https://picsum.photos/seed/{{book.title}}/300/385" class="card-img-top" alt="{{book.title}}">
+             {% else %}
+             <img src="{{book.book_image}}" class="card-img-top" width="300" height="450" alt="{{book.title}}">
+             {% endif %}
+             <div class="card-body" id="text">
+                 <a href="{{url_for('view_book',id=book.id)}}" class="card-title" style="border-radius:30px; " align="center"><h5 class="card-title" align="center">
+                     {{book.title}}
+                 
+                 </h5> </a>
+                 <p class="card-text"> 
+                     <div class="author" style="margin-left: 20px;">
+                         <strong>Author:</strong>
+                         {{book.author}}
+                     </div>
+                     <div class="publisher">
+                         <strong>Publisher:</strong>
+                         {{book.publisher}}
+                     </div>
+                     <div class="price">
+                         <strong>Price:</strong>
+                         &#8377; {{book.price}}
+                     </div>
+                 </p>
+                 <div class="card-footer bg-transparent border-success">
+                     {% if book.price>0 %}
+                     <div class="buttons">
+                         <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                         <form method="post" action="{{url_for('add_to_cart', book_id=book.id)}}">
+                             <button type="submit" class="btn btn-success" style="border-radius:30px;">
+                                 <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart
+                             </button>
+                         </form>
+                     </div>
+                 {% else %}
+                  <div style="margin-top:5px" align="center">   
+                  <a href="{{url_for('borrow',id=book.id)}}" class="btn btn-success" style="border-radius:30px; " align="center"><i class="fa fa-coffee" aria-hidden="true"></i> Borrow Book</a>
+                     </div>
+                 {% endif %}
+                </div>
+             </div>
+ </div>
+  {% endif %}
+  {% endif %}
+ {% endfor %}
+
+</div>
+</div>
+{% endfor %}
+</div>
+{% if priced_books | length ==0 %}<br>
+ <div class="alert alert-info w-50" style="border-radius: 20px; margin-left:450px;" width="20px" align="center">
+    <h3>No Such priced or less E-Books Found </h3>
+</div>
+{% endif %}
+{% endif %}
+
+{% else %}
+<br>
+<div class="alert alert-danger w-50 h-100" style="border-radius: 20px; margin-left:325px; align-items:center" width="20px" align="center">
+    <h3>Your Account Has Been Blacklisted!<br> Reason: <b>{{blacklisted.reason }}.</b><br> Blacklisted On: {{ blacklisted.blacklisted_at }}<br>  Blacklisted Till: {{ blacklisted.blacklisted_till }}<br> Please Contact Admin at <b>admin@LibraryStories.com</b> </h3>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block style %}
+<style>
+    .sections-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .books {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;}
+    .price{
+        margin-left: 20px;
+    }
+    .publisher{
+        margin-left: 20px;
+    }
+    .author{
+        margin-left: 20px;
+    }
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top:5px;}
+
+        #card { 
+            margin:10px;
+            position: relative;
+            overflow: hidden; /* Hide overflow content when collapsed */
+            background-color: #f0f0f0;
+            transition: transform 0.3s ease, opacity 0.3s ease;/* Add smooth transition effect */
+        
+        }
+
+        #card:hover {
+            transform: scale(1);
+            opacity: 0.9; /* Expand the card on hover */
+            
+        }
+      
+        #text {
+            position: absolute;
+            bottom: 0;
+            left: 0px;
+            padding: 0px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 100%;
+            transform: translateY(100%); /* Initially hidden below the card */
+            transition: transform 0.3s ease; /* Add smooth transition effect */
+        }
+        
+        #card:hover #text {
+            transform: translateY(0); /* Show content on hover */
+    }
+</style>
+{% endblock %}

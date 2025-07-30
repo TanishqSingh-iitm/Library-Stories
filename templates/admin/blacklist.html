@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    User BlackList Dashboard
+{% endblock %}
+
+{% block content %}
+<h1 class="display-1">User BlackList Dashboard</h1>
+
+<h2> All User of Library-Stories:</h2>
+{% if users %}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>ID</th>
+            <th>User Name</th>
+            <th>User Email</th>
+            <th>User Role</th>
+            <th># of Borrowed Books</th>
+            <th>Date Joined</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+        {% for User in users %}
+        <tr>
+            {% if User not in Blacklist and not User.is_admin %}
+                <td>{{ loop.index }}</td>
+                <td>{{User.username}}</td>
+                <td>{{User.email}}</td>
+                <td>{{User.role}}</td>
+            {% for bookuser in Bookaccess %}
+                {% if bookuser[0] == User %}
+                        <td>{{ bookuser[1] }}</td>
+                {% endif %}
+            {% endfor %}
+            <td>{{User.date_joined}}</td>
+            <td><div class="buttons">
+                <a href="{{url_for('blacklist_user', user_id=User.id)}}" class="btn btn-primary" style="border-radius:30px">
+                    <i class="fas fa-ban" aria-hidden="true"   ></i>
+                    Blacklist User's Account
+                </a>
+                </div>
+            </td>{% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total Users: {{ users|length }}</span>
+</div>    
+{% else %}
+<div class="alert alert-info" style="border-radius: 20px;">
+    <h3>No Users Joined Yet</h3>
+</div>
+{% endif %}
+<h2 style="margin-top:100px;">BlackListed Users:</h2>
+{% if Blacklist %}
+<table class="table">
+    <thead>
+        <tr><div class="heads">
+            <th>ID</th>
+            <th>User Name</th>
+            <th>User Email</th>
+            <th>Date BlackListed</th>
+            <th>Blacklisted till</th>
+            <th>Reason</th>
+            <th>Actions</th></div>
+        </tr>
+    </thead>
+    <tbody>
+        {% for buser in Blacklist %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{buser[0].username}}</td>
+            <td>{{buser[0].email}}</td>
+            <td>{{buser[1].blacklisted_at}}</td>
+            <td>{{buser[1].blacklisted_till}}</td>
+            <td>{{buser[1].reason}}</td>
+            <td><div class="buttons">
+                <form method="post" action="{{url_for('unblacklist_user',user_id=buser[0].id)}}">
+                    <button type="submit" class="btn btn-info" style="border-radius:30px;">
+                        <i class="fa fa-undo" aria-hidden="true"></i> Restore User
+                    </button>
+                </form>
+                <a href="{{url_for('delete_user', user_id=buser[0].id)}}" class="btn btn-danger" style="border-radius:30px">
+                    <i class="fas fa-trash" aria-hidden="true"   ></i>
+                    Delete User's Account
+                </a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="totals" align="right">
+    <span class="badge badge-pill" style="border-radius:30px;background:rgb(0, 88, 150)"> Total Blacklisted Users: {{ Blacklist|length }}</span>
+</div>    
+{% else %}
+<div class="alert alert-info" style="border-radius: 20px;">
+    <h3>No User Blacklisted</h3>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block style %}
+<style>
+    .buttons {
+        display: flex;
+        justify-content: space-around;
+    }
+    .heads {
+        justify-content: space-around;
+    }
+</style>
+{% endblock %}
